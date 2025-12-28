@@ -1,0 +1,16 @@
+
+feedparser
+requests
+
+
+pandas
+numpy
+
+matplotlib
+seaborn
+plotly
+
+python-dotenv
+
+jupyter
+notebook

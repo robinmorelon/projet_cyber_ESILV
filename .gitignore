@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+
+# Systèmes d'exploitation
+.DS_Store
+Thumbs.db
+
+# Clés et secrets (Sécurité)
+.env
+secrets.py
+
+.idea/
