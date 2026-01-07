@@ -1,8 +1,6 @@
-
-
 import feedparser
 import requests
-import re
+# import re
 
 
 # Créons une liste avec tous les liens
