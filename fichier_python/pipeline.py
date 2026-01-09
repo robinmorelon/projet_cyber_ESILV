@@ -21,13 +21,19 @@ for elem in liste_lien:
     cves_du_bulletin = data['cves']
     # Cette étape sert à garder l'URL de l'alerte
     for cve in cves_du_bulletin:
-        cve['source_alerte'] = elem
-        cve["id_alerte"] = data["reference"]
-        cve["title_alerte"] = data["title"]
-        #Pour être certain que c'est bien la date de publication car il y a plusieurs date
-        if data["revisions"][0]["description"] == "Version initiale":
-            cve["date_publication_alerte"] = data["revisions"][0]["revision_date"]
-        cve["description_alerte"] = data["risks"][0]["description"]
-    ref_cves.extend(cves_du_bulletin)
+        cve_unique.add(cve)
+        for systeme in data.get("affected_systems",[]):
+            new_line = cve.copy()
+            new_line["nom_vendeur"] = systeme.get('product',{}).get('vendor',{}).get('name')
+            new_line["nom_produit"] = systeme.get('product',{}).get('name')
+            new_line["version_info"] = systeme.get('description')
+            new_line['source_alerte'] = elem
+            new_line["id_alerte"] = data.get("reference")
+            new_line["title_alerte"] = data.get("title")
+            #Pour être certain que c'est bien la date de publication car il y a plusieurs date
+            if len(data.get("revisions",[])) and data.get("revisions",[])[0]["description"] == "Version initiale":
+                new_line["date_publication_alerte"] = data.get("revisions",[])[0]["revision_date"]
+            new_line["description_alerte"] = data.get("risks",[])[0]["description"]
+            ref_cves.append(new_line)
 print(ref_cves)
 

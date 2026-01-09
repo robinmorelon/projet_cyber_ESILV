@@ -12,6 +12,6 @@ Titre du bulletin (ANSSI) : Titre de l'avis ou de l'alerte. -> sur le lien de l'
 • Score EPSS : Probabilité d’exploitation de la vulnérabilité. -> API First
 • Lien du bulletin (ANSSI) : URL vers le bulletin original. source_alerte
 • Description : Détails sur la vulnérabilité (issue des API). / c'est bon
-• Éditeur/Vendor : Nom de l'éditeur du produit affecté. -> site lien CVE
-• Produit : Nom du produit concerné (ex : Apache HTTP Server).
-• Versions affectées : Liste des versions impactées.
+• Éditeur/Vendor : Nom de l'éditeur du produit affecté. -> site lien CVE / c'est bon
+• Produit : Nom du produit concerné (ex : Apache HTTP Server). / c'est bon
+• Versions affectées : Liste des versions impactées. / c'est bon
