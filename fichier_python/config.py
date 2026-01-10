@@ -3,7 +3,7 @@ import os
 # Paramètres de l'email d'envoi
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
-SMTP_USER = "salvetti.regis@gmail.com"
+SMTP_USER = ""
 # Le mot de passe sera demandé une seule fois lors du lancement du script
 SMTP_PASSWORD = input("Entrez le mot de passe application Gmail : ")  
 
