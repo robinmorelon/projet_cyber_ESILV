@@ -1,0 +1,18 @@
+{
+    "salvetti.regis@gmail.com": {
+        "colonne_cible": "Éditeur/Vendor",
+        "filtres": [
+            "Microsoft",
+            "Ivanti",
+            "Cisco",
+            "Apache"
+        ]
+    },
+    "regis.salvetti@edu.devinci.fr": {
+        "colonne_cible": "Produit",
+        "filtres": [
+            "Chrome",
+            "ICS"
+        ]
+    }
+}

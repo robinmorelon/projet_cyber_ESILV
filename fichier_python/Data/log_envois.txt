@@ -1,0 +1,2 @@
+[2026-01-10 15:12:10] Envoi à : salvetti.regis@gmail.com | alerte : Éditeur/Vendor | CVE envoyées : 1 | Statut : Succès
+[2026-01-10 15:12:11] Envoi à : regis.salvetti@edu.devinci.fr | alerte : Produit | CVE envoyées : 2 | Statut : Succès
