@@ -1,6 +1,6 @@
 import feedparser
 import requests
-# import re
+import re
 
 
 # Créons une liste avec tous les liens
@@ -21,7 +21,8 @@ for elem in liste_lien:
     cves_du_bulletin = data['cves']
     # Cette étape sert à garder l'URL de l'alerte
     for cve in cves_du_bulletin:
-        cve_unique.add(cve)
+        # cve_unique.add(cve)
+        cve_unique.add(cve["name"])
         for systeme in data.get("affected_systems",[]):
             new_line = cve.copy()
             new_line["nom_vendeur"] = systeme.get('product',{}).get('vendor',{}).get('name')
@@ -36,4 +37,40 @@ for elem in liste_lien:
             new_line["description_alerte"] = data.get("risks",[])[0]["description"]
             ref_cves.append(new_line)
 print(ref_cves)
+
+
+# Test pour dataframe pandas
+
+import pandas as pd
+
+# 1) Création du DataFrame (pandas aligne automatiquement les clés ; valeurs manquantes -> NaN)
+df = pd.DataFrame(ref_cves)
+
+# 2) Optionnel : remettre de l'ordre + ne garder que les colonnes utiles
+colonnes = [
+    "name", "url",
+    "nom_vendeur", "nom_produit", "version_info",
+    "id_alerte", "title_alerte", "date_publication_alerte",
+    "description_alerte", "source_alerte"
+]
+df = df.reindex(columns=[c for c in colonnes if c in df.columns])
+
+# 3) Nettoyage léger (strings)
+for col in ["name", "nom_vendeur", "nom_produit", "id_alerte", "title_alerte", "source_alerte"]:
+    if col in df.columns:
+        df[col] = df[col].astype("string").str.strip()
+
+# 4) Date -> datetime (si la colonne existe)
+if "date_publication_alerte" in df.columns:
+    df["date_publication_alerte"] = pd.to_datetime(df["date_publication_alerte"], errors="coerce", utc=True)
+
+# 5) Supprimer les doublons (souvent un bon choix)
+# Ici : même CVE + même produit + même alerte
+subset = [c for c in ["name", "nom_vendeur", "nom_produit", "id_alerte"] if c in df.columns]
+if subset:
+    df = df.drop_duplicates(subset=subset).reset_index(drop=True)
+
+print(df.head())
+
+
 
