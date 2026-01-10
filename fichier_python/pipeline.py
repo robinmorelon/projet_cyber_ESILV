@@ -1,6 +1,7 @@
 import feedparser
 import requests
 import re
+import pandas as pd
 
 
 # Créons une liste avec tous les liens
@@ -41,7 +42,7 @@ print(ref_cves)
 
 # Test pour dataframe pandas
 
-import pandas as pd
+
 
 # 1) Création du DataFrame (pandas aligne automatiquement les clés ; valeurs manquantes -> NaN)
 df = pd.DataFrame(ref_cves)
