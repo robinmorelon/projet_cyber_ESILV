@@ -37,7 +37,7 @@ def get_new_vulnerabilities(df_current):
 
 
 def send_alert_email(to_email, user_filtred_col, user_filtred_items, df_new):
-    # Filtrage selon les thèmes choisis par l'utilisateur [cite: 161]
+    # Filtrage selon les thèmes choisis par l'utilisateur
     df_filtered = df_new[df_new[user_filtred_col].isin(user_filtred_items)]
     
     if df_filtered.empty: 
