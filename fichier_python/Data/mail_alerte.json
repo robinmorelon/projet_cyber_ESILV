@@ -1,5 +1,5 @@
 {
-    "salvetti.regis@gmail.com": {
+    "prenom.nom@gmail.com": {
         "colonne_cible": "Éditeur/Vendor",
         "filtres": [
             "Microsoft",
@@ -8,7 +8,7 @@
             "Apache"
         ]
     },
-    "regis.salvetti@edu.devinci.fr": {
+    "prenom.nom@edu.devinci.fr": {
         "colonne_cible": "Produit",
         "filtres": [
             "Chrome",
