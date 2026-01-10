@@ -2,16 +2,16 @@ Construction du DataFrame
 Chaque ligne représente une colonne et comment récupérer l'info
 
 
-Titre du bulletin (ANSSI) : Titre de l'avis ou de l'alerte. -> sur le lien de l'ANSSI (source_alerte)
+Titre du bulletin (ANSSI) : Titre de l'avis ou de l'alerte. -> sur le lien de l'ANSSI (source_alerte) / c'est bon
 • Type de bulletin : Avis ou Alerte. -> sur le lien de l'ANSSI (source_alerte)
-• Date de publication : Date de publication du bulletin ANSSI. -> sur le lien de l'ANSSI (source_alerte)
+• Date de publication : Date de publication du bulletin ANSSI. -> sur le lien de l'ANSSI (source_alerte)/ c'est bon
 • Identifiant CVE : Identifiant unique de la vulnérabilité. -> name 
 • Score CVSS : Score de criticité selon le standard CVSS.-> API Mitre
 • Base Severity : Gravité associée au score CVSS (Exemple : Critique, Élevée). -> a déduire du CVSS
 • Type CWE : Catégorie de la vulnérabilité (Exemple : CWE-287). -> API Mitre
 • Score EPSS : Probabilité d’exploitation de la vulnérabilité. -> API First
 • Lien du bulletin (ANSSI) : URL vers le bulletin original. source_alerte
-• Description : Détails sur la vulnérabilité (issue des API). 
-• Éditeur/Vendor : Nom de l'éditeur du produit affecté. -> site lien CVE
-• Produit : Nom du produit concerné (ex : Apache HTTP Server).
-• Versions affectées : Liste des versions impactées.
+• Description : Détails sur la vulnérabilité (issue des API). / c'est bon
+• Éditeur/Vendor : Nom de l'éditeur du produit affecté. -> site lien CVE / c'est bon
+• Produit : Nom du produit concerné (ex : Apache HTTP Server). / c'est bon
+• Versions affectées : Liste des versions impactées. / c'est bon
