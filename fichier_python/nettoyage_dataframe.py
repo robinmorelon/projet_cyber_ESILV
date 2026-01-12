@@ -28,7 +28,10 @@ mapping = {
     "version_info": "Versions",
     "source_alerte": "Lien_Bulletin",
     "cvss_vecteur": "Vecteur_CVSS",
-    "description_alerte": "Description"
+    "description_alerte": "Description",
+    "epss_percentile": "EPSS_Percentile",
+    "description_tech": "Description_Tech",
+    "type_de_bulletin": "Type_de_Bulletin",
 }
 df = df.rename(columns=mapping)
 #print(df.head(10))
