@@ -1,6 +1,5 @@
 import feedparser
 import requests
-import re
 import pandas as pd
 import time
 import os
@@ -64,14 +63,14 @@ for elem in liste_lien:
 
 # Enrichissement avec les API
 # Je crée des compteurs de tests pour voir le pourcentage de cve ou je n'ai pas pu récupérer les infos a cause du nom du chemin
-compteur_test_erreur_chemin_Mitre = 0
-compteur_test_erreur_globale = 0
+#compteur_test_erreur_chemin_Mitre = 0
+#compteur_test_erreur_globale = 0
 info_api = {}
-# je crée une variable temporaire pour voir ou j'en suis dans la boucle
-tour_de_boucle = 0
+# je crée une variable temporaire pour voir ou j'en suis dans la boucle (uniquement pour la phase de test)
+#tour_de_boucle = 0
 for cve_id in cve_unique:
-    print(f"Tour de boucle numéro : {tour_de_boucle}")
-    tour_de_boucle+=1
+    #print(f"Tour de boucle numéro : {tour_de_boucle}")
+    #tour_de_boucle+=1
     enrichissement_cve = {"cvss": None, "cvss_gravite": "Inconnu", "cvss_vecteur": "", "cwe_id": "Inconnu", "epss": None, "epss_percentile":None, "description_tech": "Inconnu"}
     try:
         url_mitre = f"https://cveawg.mitre.org/api/cve/{cve_id}"
@@ -89,7 +88,8 @@ for cve_id in cve_unique:
                     enrichissement_cve["cvss_gravite"] = metrics["cvssV3_0"]["baseSeverity"]
                     enrichissement_cve["cvss_vecteur"] = metrics["cvssV3_0"]["vectorString"]
                 else:
-                    compteur_test_erreur_chemin_Mitre+= 1
+                    #compteur_test_erreur_chemin_Mitre+= 1
+                    pass
                 enrichissement_cve["description_tech"] = data_mitre["containers"]["cna"]["descriptions"][0]["value"]
                 problem_types = data_mitre["containers"]["cna"].get("problemTypes", [])
                 if problem_types:
@@ -112,7 +112,7 @@ for cve_id in cve_unique:
         time.sleep(1.5)
     except Exception as e:
         print(f"Erreur sur {cve_id} : {e}")
-        compteur_test_erreur_globale+=1
+        #compteur_test_erreur_globale+=1
     info_api[cve_id] = enrichissement_cve
 
 #On recolle les informations reçu dans ref_cves
@@ -149,8 +149,8 @@ df_final.to_csv(DATA_EXISTENTE, index=False)
 
 
 print(df_final.head())
-print(f"pourcentage d'erreur chemin : {compteur_test_erreur_chemin_Mitre/len(cve_unique)*100}")
-print(f"pourcentage d'erreur globale : {compteur_test_erreur_globale/len(cve_unique)*100}")
+#print(f"pourcentage d'erreur chemin : {compteur_test_erreur_chemin_Mitre/len(cve_unique)*100}")
+#print(f"pourcentage d'erreur globale : {compteur_test_erreur_globale/len(cve_unique)*100}")
 
 
 
