@@ -3,11 +3,19 @@ import requests
 import re
 import pandas as pd
 import time
+import os
 
 
-# Avertissement :
-# Le script est long à s'exécuter (plus de 30mn). Utiliser le script complet uniquement pour tester la pipeline.
-# Sinon importer directement le fichier "data_brut.csv" (dernière MàJ : 11/01/2025 17h)
+DATA_EXISTENTE = "data_brut.csv"
+urls_deja_traitees = set()
+df_existant = pd.DataFrame()
+if os.path.exists(DATA_EXISTENTE):
+    df_existant = pd.read_csv(DATA_EXISTENTE, dtype=str)
+    if "source_alerte" in df_existant.columns:
+        urls_deja_traitees = set(df_existant["source_alerte"].dropna().unique())
+else:
+    print("Pas de données existentes trouvées !")
+
 
 
 # Créons une liste avec tous les liens
@@ -23,6 +31,8 @@ for url in flux_RSS:
 ref_cves = []
 cve_unique = set()
 for elem in liste_lien:
+    if elem in urls_deja_traitees:
+        continue
     url = elem+"json/"
     response = requests.get(url)
     data = response.json()
@@ -125,35 +135,20 @@ for ligne in ref_cves:
 
 
 
-# 1) Création du DataFrame (pandas aligne automatiquement les clés ; valeurs manquantes -> NaN)
-df = pd.DataFrame(ref_cves)
-df.to_csv('data_brut.csv', index=False)
-"""
-# 2) Optionnel : remettre de l'ordre + ne garder que les colonnes utiles
-colonnes = [
-    "name", "url",
-    "nom_vendeur", "nom_produit", "version_info",
-    "id_alerte", "title_alerte", "date_publication_alerte",
-    "description_alerte", "source_alerte"
-]
-df = df.reindex(columns=[c for c in colonnes if c in df.columns])
+if ref_cves:
+    df_nouveau = pd.DataFrame(ref_cves)
+    if not df_existant.empty:
+        df_final = pd.concat([df_existant, df_nouveau], ignore_index=True)
+    else:
+        df_final = df_nouveau
+else:
+    df_final = df_existant
 
-# 3) Nettoyage léger (strings)
-for col in ["name", "nom_vendeur", "nom_produit", "id_alerte", "title_alerte", "source_alerte"]:
-    if col in df.columns:
-        df[col] = df[col].astype("string").str.strip()
 
-# 4) Date -> datetime (si la colonne existe)
-if "date_publication_alerte" in df.columns:
-    df["date_publication_alerte"] = pd.to_datetime(df["date_publication_alerte"], errors="coerce", utc=True)
+df_final.to_csv(DATA_EXISTENTE, index=False)
 
-# 5) Supprimer les doublons (souvent un bon choix)
-# Ici : même CVE + même produit + même alerte
-subset = [c for c in ["name", "nom_vendeur", "nom_produit", "id_alerte"] if c in df.columns]
-if subset:
-    df = df.drop_duplicates(subset=subset).reset_index(drop=True)
-"""
-print(df.head())
+
+print(df_final.head())
 print(f"pourcentage d'erreur chemin : {compteur_test_erreur_chemin_Mitre/len(cve_unique)*100}")
 print(f"pourcentage d'erreur globale : {compteur_test_erreur_globale/len(cve_unique)*100}")
 
