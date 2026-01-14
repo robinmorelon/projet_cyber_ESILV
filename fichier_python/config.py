@@ -44,6 +44,6 @@ NEW_DATA_FILE = os.path.join(ALERTE_DIR, "nouvelles_alerte.csv")
 # ALERTE : Paramètres de l'email d'envoi
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
-SMTP_USER = "salvetti.regis@gmail.com"
-SMTP_PASSWORD = "neyw czll jwxc aenn"
+SMTP_USER = "" # À remplir avec l'adresse email de l'expéditeur
+SMTP_PASSWORD = "" # À remplir avec le mot de passe de l'expéditeur
 COLUMNS_DF_ALERTE = ["ID_CVE", "Score_CVSS", "Gravite_CVSS","Titre_ANSSI", "ID_ANSSI", "Éditeur","Produit","Versions", "Lien_Bulletin", "Lien_Bulletin"]
