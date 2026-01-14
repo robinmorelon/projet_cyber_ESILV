@@ -1,0 +1,19 @@
+{
+    "regis.salvetti@edu.devinci.fr": {
+        "colonne_cible": "Score_CVSS",
+        "filtres": [
+            "7.5",
+            "8.0", 
+            "8.5",
+            "9.0",
+            "9.5",
+            "10.0"
+        ]
+    },
+    "robin.morelon@edu.devinci.fr": {
+        "colonne_cible": "ID_CVE",
+        "filtres": [
+            "CVE-2025-55182", "CVE-2022-40242"
+        ]
+    }
+}

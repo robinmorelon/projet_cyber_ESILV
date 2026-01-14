@@ -1,20 +1,14 @@
 import streamlit as st
-import os
-import pandas as pd
 import json
 from datetime import datetime, timedelta
+from config import USER_DB, CLEANED_CSV_FILE, os, pd
 
 st.set_page_config(page_title="Projet cyber ESILV", layout="wide")
 st.title("Dashboard de Vulnérabilités & Configuration Alertes")
 
-DOSSIER = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(DOSSIER, 'data_propre.csv')
-USER_DB = os.path.join("Data", "mail_alerte.json")
-
-
 @st.cache_data
 def load_data():
-    df = pd.read_csv(DATA)
+    df = pd.read_csv(CLEANED_CSV_FILE)
     # On fausse un peu la réalité ici en remplacant les valeurs nuls par 0 mais c'est utile pour ne pas perdre de données avec les filtres
     # Pour les visualisations, les valeurs n'ont pas étés modifiées pour garder la réalité
     df['Date_Publication'] = pd.to_datetime(df['Date_Publication'], errors='coerce')
@@ -41,7 +35,7 @@ tab1, tab2 = st.tabs(["📊 Exploration des données", "🔔 Configuration des A
 df = load_data()
 
 if df is None:
-    st.error(f"Le fichier {DATA} est introuvable.")
+    st.error(f"Le fichier {CLEANED_CSV_FILE} est introuvable.")
 else:
     with tab1:
         st.sidebar.header("Filtres d'exploration")

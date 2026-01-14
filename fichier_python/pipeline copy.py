@@ -1,13 +1,11 @@
 import feedparser
 import requests
-import re
+import pandas as pd
 import time
-# Importation du module d'alerte alerte.py et nettoyage_dataframe.py
-import alerte 
-import nettoyage_dataframe as nettoyage
-# Importation des paramètres de configuration
-from config import DATA_EXISTENTE, NEW_DATA_FILE, FLUX_RSS, os, pd
+import os
 
+
+DATA_EXISTENTE = "data_brut.csv"
 urls_deja_traitees = set()
 df_existant = pd.DataFrame()
 if os.path.exists(DATA_EXISTENTE):
@@ -21,7 +19,8 @@ else:
 
 # Créons une liste avec tous les liens
 liste_lien = []
-for url in FLUX_RSS:
+flux_RSS = ["https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/avis/feed/"]
+for url in flux_RSS:
     rss_feed = feedparser.parse(url)
     liste_lien.extend([entry.link for entry in rss_feed.entries])
 #print(liste_lien)
@@ -58,20 +57,20 @@ for elem in liste_lien:
             else:
                 new_line["description_alerte"] = "Non spécifié"
             ref_cves.append(new_line)
-print(ref_cves)
-print(len(cve_unique))
+#print(ref_cves)
+#print(len(cve_unique))
 
 
 # Enrichissement avec les API
 # Je crée des compteurs de tests pour voir le pourcentage de cve ou je n'ai pas pu récupérer les infos a cause du nom du chemin
-compteur_test_erreur_chemin_Mitre = 0
-compteur_test_erreur_globale = 0
+#compteur_test_erreur_chemin_Mitre = 0
+#compteur_test_erreur_globale = 0
 info_api = {}
-# je crée une variable temporaire pour voir ou j'en suis dans la boucle
-tour_de_boucle = 0
+# je crée une variable temporaire pour voir ou j'en suis dans la boucle (uniquement pour la phase de test)
+#tour_de_boucle = 0
 for cve_id in cve_unique:
-    print(f"Tour de boucle numéro : {tour_de_boucle}")
-    tour_de_boucle+=1
+    #print(f"Tour de boucle numéro : {tour_de_boucle}")
+    #tour_de_boucle+=1
     enrichissement_cve = {"cvss": None, "cvss_gravite": "Inconnu", "cvss_vecteur": "", "cwe_id": "Inconnu", "epss": None, "epss_percentile":None, "description_tech": "Inconnu"}
     try:
         url_mitre = f"https://cveawg.mitre.org/api/cve/{cve_id}"
@@ -89,7 +88,8 @@ for cve_id in cve_unique:
                     enrichissement_cve["cvss_gravite"] = metrics["cvssV3_0"]["baseSeverity"]
                     enrichissement_cve["cvss_vecteur"] = metrics["cvssV3_0"]["vectorString"]
                 else:
-                    compteur_test_erreur_chemin_Mitre+= 1
+                    #compteur_test_erreur_chemin_Mitre+= 1
+                    pass
                 enrichissement_cve["description_tech"] = data_mitre["containers"]["cna"]["descriptions"][0]["value"]
                 problem_types = data_mitre["containers"]["cna"].get("problemTypes", [])
                 if problem_types:
@@ -112,7 +112,7 @@ for cve_id in cve_unique:
         time.sleep(1.5)
     except Exception as e:
         print(f"Erreur sur {cve_id} : {e}")
-        compteur_test_erreur_globale+=1
+        #compteur_test_erreur_globale+=1
     info_api[cve_id] = enrichissement_cve
 
 #On recolle les informations reçu dans ref_cves
@@ -130,16 +130,13 @@ for ligne in ref_cves:
 
 
 
-# print(ref_cves)
+
 # Test pour dataframe pandas
+
+
+
 if ref_cves:
     df_nouveau = pd.DataFrame(ref_cves)
-
-    # Enregistrement des nouvelles données et lancement du système d'alerte
-    df_nouveau.to_csv(NEW_DATA_FILE, index=False)
-    nettoyage.nettoyage_df(data_brut=NEW_DATA_FILE, data_propre=NEW_DATA_FILE)
-    alerte.run_alert_system()
-
     if not df_existant.empty:
         df_final = pd.concat([df_existant, df_nouveau], ignore_index=True)
     else:
@@ -147,13 +144,13 @@ if ref_cves:
 else:
     df_final = df_existant
 
- # Mise à jour de l'historique pour éviter les doublons au prochain scan 
+
 df_final.to_csv(DATA_EXISTENTE, index=False)
 
 
 print(df_final.head())
-print(f"pourcentage d'erreur chemin : {compteur_test_erreur_chemin_Mitre/len(cve_unique)*100}")
-print(f"pourcentage d'erreur globale : {compteur_test_erreur_globale/len(cve_unique)*100}")
+#print(f"pourcentage d'erreur chemin : {compteur_test_erreur_chemin_Mitre/len(cve_unique)*100}")
+#print(f"pourcentage d'erreur globale : {compteur_test_erreur_globale/len(cve_unique)*100}")
 
 
 
