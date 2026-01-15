@@ -41,6 +41,13 @@ USER_DB = os.path.join(ALERTE_DIR, "mail_alerte.json")
 LOG_FILE = os.path.join(ALERTE_DIR, "log_alerte.txt")
 NEW_DATA_FILE = os.path.join(ALERTE_DIR, "nouvelles_alerte.csv")  
 
+
+
+
+
+
+
+
 # ALERTE : Paramètres de l'email d'envoi
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465

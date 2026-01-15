@@ -8,6 +8,8 @@ import nettoyage_dataframe as nettoyage
 # Importation des paramètres de configuration
 from config import DATA_EXISTENTE, NEW_DATA_FILE, FLUX_RSS, os, pd
 
+
+# Chargement des données existantes pour éviter les doublons
 urls_deja_traitees = set()
 df_existant = pd.DataFrame()
 if os.path.exists(DATA_EXISTENTE):
@@ -18,15 +20,14 @@ else:
     print("Pas de données existentes trouvées !")
 
 
-
-# Créons une liste avec tous les liens
+# Création d'une liste avec tous les liens
 liste_lien = []
 for url in FLUX_RSS:
     rss_feed = feedparser.parse(url)
     liste_lien.extend([entry.link for entry in rss_feed.entries])
 #print(liste_lien)
 
-# Créons une liste avec toutes les CVE de chaque lien
+# Création d'une liste avec toutes les CVE de chaque lien
 #lien_test = 'https://www.cert.ssi.gouv.fr/avis/CERTFR-2025-AVI-1076/'
 ref_cves = []
 cve_unique = set()
@@ -41,6 +42,7 @@ for elem in liste_lien:
     for cve in cves_du_bulletin:
         # cve_unique.add(cve)
         cve_unique.add(cve["name"])
+        # On crée une nouvelle ligne par système affecté
         for systeme in data.get("affected_systems",[]):
             new_line = cve.copy()
             new_line["nom_vendeur"] = systeme.get('product',{}).get('vendor',{}).get('name')
@@ -64,8 +66,8 @@ for elem in liste_lien:
 
 # Enrichissement avec les API
 # Je crée des compteurs de tests pour voir le pourcentage de cve ou je n'ai pas pu récupérer les infos a cause du nom du chemin
-#compteur_test_erreur_chemin_Mitre = 0
-#compteur_test_erreur_globale = 0
+# compteur_test_erreur_chemin_Mitre = 0
+# compteur_test_erreur_globale = 0
 info_api = {}
 # je crée une variable temporaire pour voir ou j'en suis dans la boucle (uniquement pour la phase de test)
 #tour_de_boucle = 0
@@ -116,7 +118,7 @@ for cve_id in cve_unique:
         #compteur_test_erreur_globale+=1
     info_api[cve_id] = enrichissement_cve
 
-#On recolle les informations reçu dans ref_cves
+# On recolle les informations reçues dans ref_cves
 for ligne in ref_cves:
     id_cve = ligne["name"]
     info = info_api.get(id_cve)

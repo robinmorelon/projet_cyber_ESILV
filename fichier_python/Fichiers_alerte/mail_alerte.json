@@ -1,5 +1,5 @@
 {
-    "regis.salvetti@edu.devinci.fr": {
+    "Mail destinataire 1": {
         "colonne_cible": "Score_CVSS",
         "filtres": [
             "7.5",
@@ -10,10 +10,10 @@
             "10.0"
         ]
     },
-    "robin.morelon@edu.devinci.fr": {
+    "Mail destinataire 2": {
         "colonne_cible": "ID_CVE",
         "filtres": [
-            "CVE-2025-55182", "CVE-2022-40242"
+            "CVE-2025-55182", "CVE-2022-40242", "CVE-2023-27997"
         ]
     }
 }

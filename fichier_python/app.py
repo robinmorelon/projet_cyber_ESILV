@@ -6,6 +6,7 @@ from config import USER_DB, CLEANED_CSV_FILE, os, pd
 st.set_page_config(page_title="Projet cyber ESILV", layout="wide")
 st.title("Dashboard de Vulnérabilités & Configuration Alertes")
 
+# Fonction pour charger les données nettoyées
 @st.cache_data
 def load_data():
     df = pd.read_csv(CLEANED_CSV_FILE)
@@ -17,6 +18,7 @@ def load_data():
     return df
 
 
+# Fonction pour sauvegarder la configuration des alertes
 def save_alert_config(email, filtres, colonne_cible):
     if os.path.exists(USER_DB):
         with open(USER_DB, "r", encoding='utf-8') as f:
@@ -31,9 +33,11 @@ def save_alert_config(email, filtres, colonne_cible):
         json.dump(users, f, indent=4, ensure_ascii=False)
 
 
+# Onglets pour l'exploration des données et la configuration des alertes
 tab1, tab2 = st.tabs(["📊 Exploration des données", "🔔 Configuration des Alertes"])
 df = load_data()
 
+# Gestion de l'onglet d'exploration des données
 if df is None:
     st.error(f"Le fichier {CLEANED_CSV_FILE} est introuvable.")
 else:
